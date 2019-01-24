@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/header.css" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	
+      	mui.plusReady(function(){
+      		plus.navigator.setStatusBarStyle("light");
+      		plus.navigator.setStatusBarBackground("green");
+      	});
+    </script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav title">
+	    <h1 class="mui-title title-color"><b>互信</b></h1>
+	</header>
+	
+	<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item mui-active" tabindex="0">
+	        <span class="mui-icon mui-icon-chat"></span>
+	        <span class="mui-tab-label">互信</span>
+	    </a>
+	    <a class="mui-tab-item" tabindex="1">
+	        <span class="mui-icon mui-icon-contact"></span>
+	        <span class="mui-tab-label">通讯录</span>
+	    </a>
+	    <a class="mui-tab-item" tabindex="2">
+	        <span class="mui-icon mui-icon-paperplane"></span>
+	        <span class="mui-tab-label">发现</span>
+	    </a>
+	    <a class="mui-tab-item" tabindex="3">
+	        <span class="mui-icon mui-icon-person"></span>
+	        <span class="mui-tab-label">我</span>
+	    </a>
+	</nav>
+	
+	<script type="text/javascript">
+		
+		var huxinArray = [
+			{
+				pageId: "huyan-chatlist.html",
+				pageUrl: "huyan-chatlist.html"
+			},
+			{
+				pageId: "huyan-contact.html",
+				pageUrl: "huyan-contact.html"
+			},
+			{
+				pageId: "huyan-discover.html",
+				pageUrl: "huyan-discover.html"
+			},
+			{
+				pageId: "huyan-me.html",
+				pageUrl: "huyan-me.html"
+			}
+		];
+		
+			var huxinStyle = {
+				top: "44px",
+				bottom: "50px"
+			}
+		mui.plusReady(function(){
+			//禁止手机上的返回 按钮
+			mui.back() = function(){
+				return false;
+			}
+			
+			//获取当前的webview对象
+			var indexWebview = plus.webview.currentWebview()
+			
+			//向当前主页webview追加子页的四张webview对象
+			for (var i = 0 ; i<huxinArray.length ; i ++) {
+				var huxinPage = plus.webview.create(huxinArray[i].pageUrl, 
+													huxinArray[i].pageId,
+													huxinStyle);
+													
+				//隐藏webview窗口
+				huxinPage.hide();
+				//追加每一个子页面到主页面
+				indexWebview.append(huxinPage);
+			}
+			plus.webview.show(huxinArray[0].pageId);
+			
+			//批量绑定tap事件展示不同的页面
+			mui(".mui-bar-tab").on("tap","a",function(){
+				var tabindex = this.getAttribute("tabindex");
+				
+				//显示点击的tab选项所对应的页面
+				plus.webview.show(huxinArray[tabindex].pageId,"fade-in",200);
+				
+				//隐藏其他的不需要的页面
+				for (var i = 0 ; i<huxinArray.length ; i ++) {
+					if (i != tabindex) {
+						plus.webview.hide(huxinArray[i].pageId,"fade-out", 200);
+					}
+				}
+			})
+		})
+	</script>
+		
+</body>
+</html>

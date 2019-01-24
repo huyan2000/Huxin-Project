@@ -1,0 +1,8 @@
+com\huyan\pojo\ChatMsg.class
+com\huyan\pojo\Users.class
+com\huyan\mapper\MyFriendsMapper.class
+com\huyan\mapper\FriendsRequestMapper.class
+com\huyan\mapper\ChatMsgMapper.class
+com\huyan\mapper\UsersMapper.class
+com\huyan\pojo\FriendsRequest.class
+com\huyan\pojo\MyFriends.class

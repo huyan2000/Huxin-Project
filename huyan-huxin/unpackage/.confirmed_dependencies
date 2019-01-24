@@ -1,0 +1,22 @@
+{
+	"index.html": {
+		"resources": [
+			"huyan-chatlist.html"
+		],
+		"refer": [
+			"huyan-me.html",
+			"huyan-chatlist.html",
+			"huyan-contact.html",
+			"huyan-discover.html"
+		]
+	},
+	"login.html": {
+		"refer": [
+			"login.html",
+			"index.html"
+		],
+		"resources": [
+			"login.html"
+		]
+	}
+}
