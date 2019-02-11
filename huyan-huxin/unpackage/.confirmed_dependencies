@@ -1,22 +1,35 @@
 {
-	"index.html": {
-		"resources": [
-			"huyan-chatlist.html"
-		],
-		"refer": [
-			"huyan-me.html",
-			"huyan-chatlist.html",
-			"huyan-contact.html",
-			"huyan-discover.html"
-		]
-	},
-	"login.html": {
-		"refer": [
-			"login.html",
-			"index.html"
-		],
-		"resources": [
-			"login.html"
-		]
-	}
+  "index.html": {
+    "resources": [
+      "huyan-chatlist.html"
+    ],
+    "refer": [
+      "huyan-me.html",
+      "huyan-chatlist.html",
+      "huyan-contact.html",
+      "huyan-discover.html"
+    ]
+  },
+  "login.html": {
+    "refer": [
+      "login.html",
+      "index.html"
+    ],
+    "resources": [
+      "login.html"
+    ]
+  },
+  "huyan-me.html": {
+    "refer": [
+      "myface.html",
+      "login.html",
+      "mynickname.html",
+      "myQRCode.html"
+    ]
+  },
+  "myface.html": {
+    "refer": [
+      "plugin/v3.1.6/myface-uploader.html"
+    ]
+  }
 }

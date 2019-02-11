@@ -66,8 +66,9 @@
 				bottom: "50px"
 			}
 		mui.plusReady(function(){
-			//禁止手机上的返回 按钮
-			mui.back() = function(){
+			
+			//禁止返回到登录注册页面
+			mui.back = function(){
 				return false;
 			}
 			
@@ -101,7 +102,13 @@
 					}
 				}
 			})
-		})
+			//延时加载
+			setTimeout("initData()","1000");
+		});
+		function initData(){
+			var huyan_me = plus.webview.getWebviewById("huyan-me.html");
+			mui.fire(huyan_me, "refresh");
+		}
 	</script>
 		
 </body>

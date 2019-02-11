@@ -26,13 +26,17 @@ C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\pojo\Us
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\NettyBooter.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\service\UserService.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\service\impl\UserServiceImpl.java
+C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\FastdfsImporter.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\pojo\FriendsRequest.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\org\n3r\idworker\utils\HttpReq.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\mapper\UsersMapper.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\org\n3r\idworker\DayCode.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\pojo\ChatMsg.java
+C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\utils\FastDFSClient.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\org\n3r\idworker\utils\IPv4Utils.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\netty\ChatHandler.java
+C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\pojo\bo\UsersBO.java
+C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\utils\FileUtils.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\utils\MyMapper.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\org\n3r\idworker\IdWorker.java
 C:\Users\administor\workspace2\huyan-huxin-netty\src\main\java\com\huyan\mapper\MyFriendsMapper.java

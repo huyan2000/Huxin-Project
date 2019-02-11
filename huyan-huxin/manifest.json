@@ -1,6 +1,6 @@
 {
 	"@platforms": ["android", "iPhone", "iPad"],
-	"id": "H5E87F888",/*应用的标识，创建应用时自动生成，勿手动修改*/
+	"id": "H51043E52",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "huyan-huxin",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.0.0",/*应用版本名称*/
@@ -145,6 +145,23 @@
 				],
 				"refer": [
 					"index.html"
+				],
+				"priority": 0
+			},
+			"huyan-me.html": {
+				"resources": [],
+				"refer": [
+					"myface.html",
+					"login.html",
+					"mynickname.html",
+					"myQRCode.html"
+				],
+				"priority": 0
+			},
+			"myface.html": {
+				"resources": [],
+				"refer": [
+					"plugin/v3.1.6/myface-uploader.html"
 				],
 				"priority": 0
 			}
