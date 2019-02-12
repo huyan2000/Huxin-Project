@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.huyan.enums.OperatorFriendRequestTypeEnum;
 import com.huyan.enums.SearchFriendsStatusEnum;
 import com.huyan.pojo.Users;
 import com.huyan.pojo.bo.UsersBO;
@@ -108,6 +109,9 @@ public class UserController {
 		return HUyanJSONResult.ok(result);
 	}
 
+	/**
+	 * @Description: 搜索好友接口，根据账号做匹配查询而不是模糊查询
+	 */
 	@PostMapping("/search")
 	public HUyanJSONResult searchUser(String myuserId,String friendUsername) throws Exception {
 		//0.判断myuserId friendUsername不能为空
@@ -128,5 +132,68 @@ public class UserController {
 				String errorMsg = com.huyan.enums.SearchFriendsStatusEnum.getMsgByKey(status);
 				return HUyanJSONResult.errorMsg(errorMsg);
 			}
+	}
+	/**
+	 * @Description: 发送加好友的请求
+	 */
+	@PostMapping("/addFriendRequest")
+	public HUyanJSONResult addFriendRequest(String myuserId,String friendUsername) throws Exception {
+		//0.判断myuserId friendUsername不能为空
+		if (StringUtils.isBlank(myuserId) || StringUtils.isBlank(friendUsername)) {
+			return HUyanJSONResult.errorMsg("");
+		}
+		
+		// 前置条件 - 1. 搜索的用户如果不存在，返回[无此用户]
+		// 前置条件 - 2. 搜索账号是你自己，返回[不能添加自己]
+		// 前置条件 - 3. 搜索的朋友已经是你的好友，返回[该用户已经是你的好友]
+		Integer status = userService.preconditionSearchFriends(myuserId, friendUsername);
+		if (status == SearchFriendsStatusEnum.SUCCESS.status) {
+			userService.sendFriendsRequstRequest(myuserId, friendUsername);
+
+			} else {
+				String errorMsg = com.huyan.enums.SearchFriendsStatusEnum.getMsgByKey(status);
+				return HUyanJSONResult.errorMsg(errorMsg);
+			}
+		return HUyanJSONResult.ok();
+	}
+	@PostMapping("/queryFriendRequests")
+	public HUyanJSONResult addFriendRequest(String userId) throws Exception {
+		
+				// 0.判断 myUserId friendUsername 不能为空
+				if (StringUtils.isBlank(userId)) {
+					return HUyanJSONResult.errorMsg("");
+				}
+				
+				//1.查询用户接收到的朋友申请
+				return HUyanJSONResult.ok(userService.queryFriendRequestList(userId));
+		
+	}
+	/**
+	 *	@Description: 接受方通过或者忽略好友请求 
+	 */
+	@PostMapping("/operFriendRequest")
+	public HUyanJSONResult operFriendRequest(String acceptUserId,String sendUserId,Integer operType) throws Exception {
+		
+				// 0.判断 acceptUserId sendUserId 不能为空
+				if (StringUtils.isBlank(acceptUserId) || StringUtils.isBlank(acceptUserId) || operType == null) {
+					return HUyanJSONResult.errorMsg("");
+				}
+				//1.如果operType 没有对应的枚举值，则直接抛出空错误信息
+				if (StringUtils.isBlank(OperatorFriendRequestTypeEnum.getMsgByType(operType))) {
+					return HUyanJSONResult.errorMsg("");
+				}
+				if (operType == OperatorFriendRequestTypeEnum.IGNORE.type) {
+					//判断如果忽略好友请求，则直接删除好友请求的数据库记录
+					userService.deleteFriendRequest(sendUserId, acceptUserId);
+					}else if (operType == OperatorFriendRequestTypeEnum.PASS.type) {
+						//3.判断如果是好友请求，则互相增加好友记录到数据库对应的表
+						//然后删除好友请求的数据库表记录
+						userService.passFriendRequest(sendUserId, acceptUserId);
+						}
+						
+				
+				//1.查询用户接收到的朋友申请
+				return HUyanJSONResult.ok();
+		
 	}
 }

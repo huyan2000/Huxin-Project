@@ -12,13 +12,13 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
-		    <a id="link_submit_nickname" class="mui-icon mui-icon-right-nav mui-pull-right" style="color: white; font-size: 14px; line-height: 15px;">完成</a>
-		    <h1 class="mui-title title-color">设置昵称</h1>
+		    <a id="link_submit_search" class="mui-icon mui-icon-right-nav mui-pull-right" style="color: white; font-size: 14px; line-height: 15px;">搜索</a>
+		    <h1 class="mui-title title-color">添加朋友</h1>
 		</header>
 		
 		<div class="mui-content">
 		    	<div class="mui-input-row">
-		    	    <input id="txt_nickname" type="text" class="mui-input-speech mui-input-clear" placeholder="修改昵称">
+		    	    <input id="txt_yourfriend_username" type="text" class="mui-input-speech mui-input-clear" placeholder="搜索朋友">
 		    	</div>
 		</div>
 		
@@ -30,32 +30,20 @@
 			
 			mui.plusReady(function(){
 				var user = app.getUserGlobalnfo();
-				var mynickname = user.nickname;
 				
-				var txt_nickname = document.getElementById("txt_nickname");
-				txt_nickname.value = mynickname;
+				var txt_your_friend_username = document.getElementById("txt_your_friend_username");
 				
-				//提交事件，修改昵称
-				var link_submit_nickname = document.getElementById("link_submit_nickname");
-				link_submit_nickname.addEventListener("tap", function(){
-					var newNickname = txt_nickname.value;
+
+				//提交事件，搜索朋友
+				var link_submit_search = document.getElementById("link_submit_search");
+				link_submit_search.addEventListener("tap", function(){
 					
-					if (newNickname.length < 1) {
-						app.showToast("昵称长度太短","error");
-						return false;
-					}
-					if (newNickname.length > 8) {
-						app.showToast("昵称不能超过8位","error");
-						return false;
-					}
+					var yourFriendUsername = txt_your_friend_username.value;
 					
 					plus.nativeUI.showWaiting("请稍后...");
 					//后端联调
-					mui.ajax(app.serverUrl + "/u/setNickname",{
-								data:{
-									userId: user.id,
-									nickname: newNickname
-								},
+					mui.ajax(app.serverUrl + "/u/search?myUserId=" + user.id + "&friendUsername=" + yourFriendUsername,{
+								data:{},
 								dataType:'json',//服务器返回json格式数据
 								type:'post',//HTTP请求类型
 								timeout:10000,//超时时间设置为10秒；
@@ -65,16 +53,16 @@
 									plus.nativeUI.closeWaiting();
 									
 									if (data.status == 200) {
-										//保存全局用户对象到本地缓存
-										var userInfoJson = data.data;
-										app.setUserGlobalnfo(userInfoJson);
 										
-										// 触发另外一个webview的自定义事件，可以使用 mui.fire()
-										var huyan_meWebview = plus.webview.getWebviewById("huyan-me.html");
-										mui.fire(huyan_meWebview, "refresh");
-									
-										//页面跳转
-										mui.back();
+										mui.openWindow({
+											url:"searchFriendsResult.html",
+											id:"searchFriendsResult.html",
+											styles:{},
+											extras:{
+												willBeFriend:data.data
+											}
+										)};
+										
 									}else{
 										app.showToast(data.msg, "error");
 									}

@@ -1,7 +1,10 @@
 package com.huyan.service.impl;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
+import org.apache.tomcat.util.buf.UEncoder;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.zxing.Result;
 import com.huyan.enums.SearchFriendsStatusEnum;
+import com.huyan.mapper.FriendsRequestMapper;
 import com.huyan.mapper.MyFriendsMapper;
 import com.huyan.mapper.UsersMapper;
+import com.huyan.mapper.UsersMapperCustom;
+import com.huyan.pojo.FriendsRequest;
 import com.huyan.pojo.MyFriends;
 import com.huyan.pojo.Users;
+import com.huyan.pojo.vo.FriendRequestVO;
 import com.huyan.service.UserService;
 import com.huyan.utils.FastDFSClient;
 import com.huyan.utils.FileUtils;
@@ -35,7 +42,13 @@ public class UserServiceImpl implements UserService {
 	private UsersMapper userMapper;
 	
 	@Autowired
+	private UsersMapperCustom usersMapperCustom;
+	
+	@Autowired
 	private MyFriendsMapper myFriendsMapper;
+	
+	@Autowired
+	private FriendsRequestMapper friendsRequestMapper;
 	
 	@Autowired
 	private Sid sid;
@@ -156,7 +169,82 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Users queryUserInfoByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		Example ue = new Example(Users.class);
+		Criteria uc = ue.createCriteria();
+		uc.andEqualTo("username",username);
+		return userMapper.selectOneByExample(ue);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.huyan.service.UserService#sendFriendsRequstRequest(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void sendFriendsRequstRequest(String myuserId, String friendUsername) {
+		//更具用户名吧朋友信息查询出阿里
+		Users friend = queryUserInfoByUsername(friendUsername);
+		
+		//1.查询发送好友请求记录表
+		Example fre = new Example(FriendsRequest.class);
+		Criteria frc = fre.createCriteria();
+		frc.andEqualTo("sendUserId",myuserId);
+		frc.andEqualTo("acceptUserId",friend.getId());
+		FriendsRequest friendRequest = friendsRequestMapper.selectOneByExample(fre);
+		if (friendRequest == null) {
+			//2.如果不是你的好友，并且好友记录没有添加，则新增好友请求记录
+			String requestId = sid.nextShort();
+			
+			FriendsRequest request = new FriendsRequest();
+			request.setId(requestId);
+			request.setSendUserId(myuserId);
+			request.setAcceptUserId(friend.getId());
+			request.setRequestDateTime(new Date());
+			friendsRequestMapper.insert(request);
+		}
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.huyan.service.UserService#queryFriendRequestList(java.lang.String)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public List<FriendRequestVO> queryFriendRequestList(String acceptUserId) {
+		return usersMapperCustom.queryFriendRequestList(acceptUserId);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.huyan.service.UserService#deleteFriendRequest(java.lang.String, java.lang.String)
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Override
+	public void deleteFriendRequest(String sendUserId, String acceptUserId) {
+		Example fre = new Example(MyFriends.class);
+		Criteria frc = fre.createCriteria();
+		frc.andEqualTo("sendUserId",sendUserId);
+		frc.andEqualTo("acceptUserId",acceptUserId);
+		friendsRequestMapper.deleteByExample(fre);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.huyan.service.UserService#passFriendRequest(java.lang.String, java.lang.String)
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Override
+	public void passFriendRequest(String sendUserId, String acceptUserId) {
+		saveFriends(sendUserId,acceptUserId);
+		saveFriends(acceptUserId,sendUserId);
+		deleteFriendRequest(sendUserId,acceptUserId);
+		
+		
+	}
+	@Transactional(propagation = Propagation.REQUIRED)
+	private void saveFriends(String sendUserId, String acceptUserId) {
+		MyFriends myFriends = new MyFriends();
+		String recordId = sid.nextShort();
+		myFriends.setId(recordId);
+		myFriends.setMyFriendUserId(acceptUserId);
+		myFriends.setMyUserId(sendUserId);
+		myFriendsMapper.insert(myFriends);
+		
 	}
 }

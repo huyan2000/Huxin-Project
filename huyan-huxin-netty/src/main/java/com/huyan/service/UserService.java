@@ -1,8 +1,11 @@
 package com.huyan.service;
 
+import java.util.List;
+
 import org.apache.ibatis.lang.UsesJava7;
 
 import com.huyan.pojo.Users;
+import com.huyan.pojo.vo.FriendRequestVO;
 
 /** 
   * @author 胡琰 
@@ -28,5 +31,28 @@ public interface UserService {
 	public Integer preconditionSearchFriends(String myuserId,String friendUsername);
 	
 	public Users queryUserInfoByUsername(String username);
+
+	/**
+	 * @param 添加好友请求记录
+	 */
+	public void sendFriendsRequstRequest(String myuserId, String friendUsername);
 	
+	/**
+	 * 	查询好友请求
+	 * */
+	public List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
+	
+	/**
+	 * 	删除好友请求记录
+	 */
+	public void deleteFriendRequest(String sendUserId, String acceptUserId);
+	
+	/**
+	 * 
+	 *	通过好友请求 
+	 *	1.保存好友
+	 *	2.逆向保存好友
+	 *	3.删除好友请求记录
+	 */
+	public void passFriendRequest(String sendUserId, String acceptUserId);
 }
