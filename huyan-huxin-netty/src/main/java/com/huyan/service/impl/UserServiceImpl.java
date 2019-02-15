@@ -22,6 +22,7 @@ import com.huyan.pojo.FriendsRequest;
 import com.huyan.pojo.MyFriends;
 import com.huyan.pojo.Users;
 import com.huyan.pojo.vo.FriendRequestVO;
+import com.huyan.pojo.vo.MyFriendsVO;
 import com.huyan.service.UserService;
 import com.huyan.utils.FastDFSClient;
 import com.huyan.utils.FileUtils;
@@ -246,5 +247,14 @@ public class UserServiceImpl implements UserService {
 		myFriends.setMyUserId(sendUserId);
 		myFriendsMapper.insert(myFriends);
 		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.huyan.service.UserService#queryMyFriends(java.lang.String)
+	 */
+	@Override
+	public List queryMyFriends(String userId) {
+		List<MyFriendsVO> myFriends = usersMapperCustom.queryMyFriends(userId);
+		return myFriends;
 	}
 }

@@ -1,5 +1,8 @@
 package com.huyan.controller;
 
+import java.lang.reflect.Proxy;
+import java.util.List;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.omg.CORBA.PUBLIC_MEMBER;
@@ -14,6 +17,7 @@ import com.huyan.enums.OperatorFriendRequestTypeEnum;
 import com.huyan.enums.SearchFriendsStatusEnum;
 import com.huyan.pojo.Users;
 import com.huyan.pojo.bo.UsersBO;
+import com.huyan.pojo.vo.MyFriendsVO;
 import com.huyan.pojo.vo.UsersVO;
 import com.huyan.service.UserService;
 import com.huyan.utils.FastDFSClient;
@@ -190,10 +194,23 @@ public class UserController {
 						//然后删除好友请求的数据库表记录
 						userService.passFriendRequest(sendUserId, acceptUserId);
 						}
-						
-				
+						//4.数据库查询好友列表
+						List<MyFriendsVO> myfriends = userService.queryMyFriends(acceptUserId);
 				//1.查询用户接收到的朋友申请
-				return HUyanJSONResult.ok();
+				return HUyanJSONResult.ok(myfriends);
 		
+	}
+	/**
+	 *	@Description: 查询我的好友列表
+	 */
+	@PostMapping("/myFriends")
+	public HUyanJSONResult myFriends(String userId) {
+		//0.userId判断不能为空
+		if (StringUtils.isBlank(userId)) {
+			return HUyanJSONResult.errorMsg("");
+		}
+		//1.数据库查询好友列表
+		List<MyFriendsVO> myfriends = userService.queryMyFriends(userId);
+		return HUyanJSONResult.ok(myfriends);
 	}
 }

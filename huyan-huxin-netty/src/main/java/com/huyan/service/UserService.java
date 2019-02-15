@@ -55,4 +55,9 @@ public interface UserService {
 	 *	3.删除好友请求记录
 	 */
 	public void passFriendRequest(String sendUserId, String acceptUserId);
+	
+	/**
+	 * 查询好友列表
+	 */
+	public List queryMyFriends(String userId);
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.imooc.mapper.UsersMapperCustom" >
+<mapper namespace="com.huyan.mapper.UsersMapperCustom" >
 
-	<select id="queryFriendRequestList" resultType="com.imooc.pojo.vo.FriendRequestVO" 
+	<select id="queryFriendRequestList" resultType="com.huyan.pojo.vo.FriendRequestVO" 
 			parameterType="String">
 		
 		select 
@@ -22,7 +22,7 @@
 	</select>
 	
 	
-	<select id="queryMyFriends" resultType="com.imooc.pojo.vo.MyFriendsVO" 
+	<select id="queryMyFriends" resultType="com.huyan.pojo.vo.MyFriendsVO" 
 			parameterType="String">
 		
 		select 
