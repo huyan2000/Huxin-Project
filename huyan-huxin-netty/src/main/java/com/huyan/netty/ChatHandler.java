@@ -17,7 +17,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
   */
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-	private static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+	private static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 	/* (non-Javadoc)
 	 * @see io.netty.channel.SimpleChannelInboundHandler#channelRead0(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
@@ -31,7 +31,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 //			channel.writeAndFlush(new TextWebSocketFrame("[服务器在]" + LocalDateTime.now() + "接收到消息，消息为：" + content));
 //		}
 		//下面这个方法，和上面的for循环一致
-		clients.writeAndFlush(new TextWebSocketFrame("[服务器在]" + LocalDateTime.now() + "接收到消息，消息为" + content));
+		users.writeAndFlush(new TextWebSocketFrame("[服务器在]" + LocalDateTime.now() + "接收到消息，消息为" + content));
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +41,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 	//获取客户端的channel，并且放到channelGroup中去进行管理
 	@Override
 	public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-		clients.add(ctx.channel());
+		users.add(ctx.channel());
 	}
 
 	
@@ -49,8 +49,17 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
 		//当触发handlerRemoved，ChannelGroup会自动移除对应客户端的channel
 //		clients.remove(ctx.channel());
-		System.out.println("客户端断开，channel对应的长id为：" + ctx.channel().id().asLongText());
-		System.out.println("客户端断开，channel对应的短id为：" + ctx.channel().id().asShortText());
+//		System.out.println("客户端断开，channel对应的长id为：" + ctx.channel().id().asLongText());
+//		System.out.println("客户端断开，channel对应的短id为：" + ctx.channel().id().asShortText());
+		users.remove(ctx.channel());
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		cause.printStackTrace();
+		//
+		ctx.channel().close();
+		users.remove(ctx.channel());
 	}
 	
 }
