@@ -13,11 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.zxing.Result;
+import com.huyan.enums.MsgSignFlagEnum;
 import com.huyan.enums.SearchFriendsStatusEnum;
+import com.huyan.mapper.ChatMsgMapper;
 import com.huyan.mapper.FriendsRequestMapper;
 import com.huyan.mapper.MyFriendsMapper;
 import com.huyan.mapper.UsersMapper;
 import com.huyan.mapper.UsersMapperCustom;
+import com.huyan.netty.ChatMsg;
 import com.huyan.pojo.FriendsRequest;
 import com.huyan.pojo.MyFriends;
 import com.huyan.pojo.Users;
@@ -27,7 +30,6 @@ import com.huyan.service.UserService;
 import com.huyan.utils.FastDFSClient;
 import com.huyan.utils.FileUtils;
 import com.huyan.utils.QRCodeUtils;
-
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 
@@ -47,6 +49,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private MyFriendsMapper myFriendsMapper;
+	
+	@Autowired
+	private ChatMsgMapper chatMsgMapper; 
 	
 	@Autowired
 	private FriendsRequestMapper friendsRequestMapper;
@@ -256,5 +261,21 @@ public class UserServiceImpl implements UserService {
 	public List queryMyFriends(String userId) {
 		List<MyFriendsVO> myFriends = usersMapperCustom.queryMyFriends(userId);
 		return myFriends;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Override
+	public String saveMsg(ChatMsg chatMsg) {
+		com.huyan.pojo.ChatMsg msgDB = new com.huyan.pojo.ChatMsg();
+		String msgId = sid.nextShort();
+		msgDB.setId(msgId);
+		msgDB.setAcceptUserId(chatMsg.getReceiverId());
+		msgDB.setSendUserId(chatMsg.getSenderId());
+		msgDB.setCreateTime(new Date());
+		msgDB.setSignFlag(MsgSignFlagEnum.unsign.type);
+		msgDB.setMsg(chatMsg.getMsg());
+		chatMsgMapper.insert(msgDB);
+		
+		return msgId;
 	}
 }

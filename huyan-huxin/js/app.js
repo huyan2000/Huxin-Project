@@ -52,6 +52,44 @@ window.app = {
 	 */
 	userLogout: function(){
 		plus.storage.removeItem("userInfo");
-	}
+	},
+	/**
+	 * 获取本地缓存中的联系人列表
+	 */
+	getContactList: function(){
+		var contatckListStr = plus .storage.getItem("contactList");
+		
+		if (!this.isNotNull(contactListStr)) {
+			return [];
+			
+		}
+		return JSON.parse(contactListStr);
+		
+	},
 	
+	/**
+	 * 与后端枚举对应
+	 */
+	CONNECT:1,// "第一次(或重连)初始化连接"
+	CHAT:2, //"聊天消息"
+	SIGNED:3, //"消息签收"
+	KEEPALIVE:4, //"客户端保持心跳"
+	
+	/**
+	 * 与后端聊天模型对象保持一致
+	 */
+	ChatMsg: function(senderId, receiverId,msg,msgId){
+			this.senderId = senderId;
+			this.receiverId = receiverId;
+			this.msg = msg;
+			this.msgId = msgId;
+		}
+	/**
+	 * 构建消息DataContent模型对象
+	 */
+	DataContent: function(action, charMsg,extand){
+			this.action = action;
+			this.charMsg = charMsg;
+			this.extand = extand;
+		}
 	}

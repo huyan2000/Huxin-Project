@@ -25,7 +25,7 @@
 
 		<header class="mui-bar mui-bar-nav title" style="position: fixed;">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left title-color"></a>
-			<h1 class="mui-title title-color"><b id="chatting-nickname">慕 信</b></h1>
+			<h1 class="mui-title title-color"><b id="chatting-nickname">互 信</b></h1>
 		</header>
 
 		<div id="msg-outter" class="mui-content">
@@ -150,7 +150,7 @@
 						var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 						
 						// 调用websocket 发送消息到netty后端
-						var wsWebview = plus.webview.getWebviewById("imooc-chatlist.html");
+						var wsWebview = plus.webview.getWebviewById("huyan-chatlist.html");
 						wsWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
 //						wsWebview.evalJS("CHAT.chat('" + msg_text_val + "')");
 						

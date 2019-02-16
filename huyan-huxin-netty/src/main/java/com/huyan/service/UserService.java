@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.lang.UsesJava7;
 
+import com.huyan.netty.ChatMsg;
 import com.huyan.pojo.Users;
 import com.huyan.pojo.vo.FriendRequestVO;
 
@@ -38,18 +39,18 @@ public interface UserService {
 	public void sendFriendsRequstRequest(String myuserId, String friendUsername);
 	
 	/**
-	 * 	查询好友请求
+	 * 	@Description:查询好友请求
 	 * */
 	public List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
 	
 	/**
-	 * 	删除好友请求记录
+	 * 	@Description:删除好友请求记录
 	 */
 	public void deleteFriendRequest(String sendUserId, String acceptUserId);
 	
 	/**
 	 * 
-	 *	通过好友请求 
+	 *	@Description:通过好友请求 
 	 *	1.保存好友
 	 *	2.逆向保存好友
 	 *	3.删除好友请求记录
@@ -57,7 +58,17 @@ public interface UserService {
 	public void passFriendRequest(String sendUserId, String acceptUserId);
 	
 	/**
-	 * 查询好友列表
+	 * 	@Description:查询好友列表
 	 */
 	public List queryMyFriends(String userId);
+	
+	/**
+	 * 	@Description:保存聊天消息到数据库
+	 */
+	public String saveMsg(ChatMsg chatMsg);
+	
+	/**
+	 *  @Description:批量签收消息
+	 */
+	public void updataMsgSigned(List<String> msgIdList);
 }
