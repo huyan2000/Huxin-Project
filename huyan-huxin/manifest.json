@@ -164,6 +164,14 @@
 					"plugin/v3.1.6/myface-uploader.html"
 				],
 				"priority": 0
+			},
+			"huyan-discover.html": {
+				"resources": [],
+				"refer": [
+					"searchFriends.html",
+					"scanme.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

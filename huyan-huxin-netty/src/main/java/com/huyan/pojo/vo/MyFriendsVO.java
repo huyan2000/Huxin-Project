@@ -4,6 +4,7 @@ public class MyFriendsVO {
     private String friendUserId;
     private String friendUsername;
     private String friendFaceImage;
+    private String friendNickname;
     /**
 	 * @return the friendUserId
 	 */
@@ -40,17 +41,10 @@ public class MyFriendsVO {
 	public void setFriendFaceImage(String friendFaceImage) {
 		this.friendFaceImage = friendFaceImage;
 	}
-	/**
-	 * @return the friendNickname
-	 */
 	public String getFriendNickname() {
 		return friendNickname;
 	}
-	/**
-	 * @param friendNickname the friendNickname to set
-	 */
 	public void setFriendNickname(String friendNickname) {
 		this.friendNickname = friendNickname;
 	}
-	private String friendNickname;
 }

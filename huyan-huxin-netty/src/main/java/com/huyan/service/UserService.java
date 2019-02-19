@@ -2,11 +2,10 @@ package com.huyan.service;
 
 import java.util.List;
 
-import org.apache.ibatis.lang.UsesJava7;
-
 import com.huyan.netty.ChatMsg;
 import com.huyan.pojo.Users;
 import com.huyan.pojo.vo.FriendRequestVO;
+import com.huyan.pojo.vo.MyFriendsVO;
 
 /** 
   * @author 胡琰 
@@ -58,9 +57,9 @@ public interface UserService {
 	public void passFriendRequest(String sendUserId, String acceptUserId);
 	
 	/**
-	 * 	@Description:查询好友列表
+	 * @Description: 查询好友列表
 	 */
-	public List queryMyFriends(String userId);
+	public List<MyFriendsVO> queryMyFriends(String userId);
 	
 	/**
 	 * 	@Description:保存聊天消息到数据库
@@ -71,4 +70,11 @@ public interface UserService {
 	 *  @Description:批量签收消息
 	 */
 	public void updataMsgSigned(List<String> msgIdList);
+	
+	/**
+	 * @Description: 获取未签收消息列表
+	 */
+	public List<com.huyan.pojo.ChatMsg> getUnReadMsgList(String acceptUserId);
+	
+	
 }

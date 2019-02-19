@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /** 
   * @author 胡琰 
@@ -32,6 +33,14 @@ public class WSServerInitialzer extends ChannelInitializer<SocketChannel> {
 		//几乎在netty中的编程，都会用到此handler
 		pipeline.addLast(new HttpObjectAggregator(1024*64));
 		//上面的代码用来支持http的
+		//增加心跳支持start
+		
+		//针对客户端，日过在1分钟时没有向服务端发送读写心跳（ALL）
+		//如果是度空闲或者是写空闲，不出路
+		pipeline.addLast(new IdleStateHandler(8, 10, 12));
+		//自定义的空闲状态检测
+		pipeline.addLast(new HeartBeatHandler());
+		//增加心跳支持end
 		//下面的代码是支持httpwebSocket
 		/**
 		 * websocket 服务器处理的协议，用于指定给客户端连接访问的路由 : /ws

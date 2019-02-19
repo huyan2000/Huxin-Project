@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tomcat.util.buf.UEncoder;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.zxing.Result;
 import com.huyan.enums.MsgSignFlagEnum;
 import com.huyan.enums.SearchFriendsStatusEnum;
 import com.huyan.mapper.ChatMsgMapper;
@@ -258,7 +256,7 @@ public class UserServiceImpl implements UserService {
 	 * @see com.huyan.service.UserService#queryMyFriends(java.lang.String)
 	 */
 	@Override
-	public List queryMyFriends(String userId) {
+	public List<MyFriendsVO> queryMyFriends(String userId) {
 		List<MyFriendsVO> myFriends = usersMapperCustom.queryMyFriends(userId);
 		return myFriends;
 	}
@@ -277,5 +275,24 @@ public class UserServiceImpl implements UserService {
 		chatMsgMapper.insert(msgDB);
 		
 		return msgId;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Override
+	public void updataMsgSigned(List<String> msgIdList) {
+		usersMapperCustom.batchUpdateMsgSigned(msgIdList);
+	}
+	
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public List<com.huyan.pojo.ChatMsg> getUnReadMsgList(String acceptUserId) {
+		Example chatExample = new Example(com.huyan.pojo.ChatMsg.class);
+		Criteria chatCriteria = chatExample.createCriteria();
+		chatCriteria.andEqualTo("signFlag", 0);
+		chatCriteria.andEqualTo("acceptUserId", acceptUserId);
+		
+		List<com.huyan.pojo.ChatMsg> result = chatMsgMapper.selectByExample(chatExample);
+		
+		return result;
 	}
 }

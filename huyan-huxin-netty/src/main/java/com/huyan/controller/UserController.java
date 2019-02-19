@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.huyan.enums.OperatorFriendRequestTypeEnum;
 import com.huyan.enums.SearchFriendsStatusEnum;
+import com.huyan.pojo.ChatMsg;
 import com.huyan.pojo.Users;
 import com.huyan.pojo.bo.UsersBO;
 import com.huyan.pojo.vo.MyFriendsVO;
@@ -212,5 +213,18 @@ public class UserController {
 		//1.数据库查询好友列表
 		List<MyFriendsVO> myfriends = userService.queryMyFriends(userId);
 		return HUyanJSONResult.ok(myfriends);
+	}
+	
+	@PostMapping("/getUnReadMsgList")
+	public HUyanJSONResult getUnReadMsgList(String acceptUserId) {
+		//0.userId判断不为空
+		if (StringUtils.isBlank(acceptUserId)) {
+			return HUyanJSONResult.errorMsg("");
+		}
+		
+		//查询列表
+		List<com.huyan.pojo.ChatMsg> unreadMsgList = userService.getUnReadMsgList(acceptUserId);
+		return HUyanJSONResult.ok(unreadMsgList);
+		
 	}
 }
